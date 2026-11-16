@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ScholarHub — Global Student Research & Academic Q&A</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & Merriweather -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Merriweather', 'serif'],
+          },
+          colors: {
+            navy: {
+              850: '#101d36',
+              900: '#0a1326',
+              950: '#060c18',
+            },
+          },
+        },
+      },
+    };
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-navy-950 dark:text-slate-100 transition-colors duration-200 min-h-screen flex flex-col">
+
+  <!-- Academic Integrity Top Banner -->
+  <div class="bg-navy-900 dark:bg-black text-slate-200 text-xs sm:text-sm py-2.5 px-4 border-b border-slate-700/60">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
+      <div class="flex items-center gap-2">
+        <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 shrink-0">
+          <i class="fa-solid fa-graduation-cap text-xs"></i>
+        </span>
+        <span>
+          <strong class="text-emerald-400 font-semibold">Academic Integrity & Study-Only Policy:</strong> 
+          ScholarHub is strictly for peer mentorship, research collaboration, and conceptual learning. Plagiarism or contract cheating is prohibited.
+        </span>
+      </div>
+      <button id="openIntegrityModalBtn" class="text-emerald-400 hover:text-emerald-300 underline font-medium shrink-0 text-xs">
+        Read Honor Code
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Sticky Navigation -->
+  <header class="sticky top-0 z-40 bg-white/90 dark:bg-navy-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      <!-- Brand Logo -->
+      <a href="#" id="resetFiltersBrand" class="flex items-center gap-2.5 group">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-600 to-teal-700 flex items-center justify-center text-white shadow-sm group-hover:scale-105 transition-transform">
+          <i class="fa-solid fa-book-open-reader text-lg"></i>
+        </div>
+        <div>
+          <span class="font-bold text-lg tracking-tight text-slate-900 dark:text-white">Scholar<span class="text-emerald-600 dark:text-emerald-400">Hub</span></span>
+          <span class="hidden md:block text-[10px] uppercase tracking-widest text-slate-500 dark:text-slate-400 -mt-1">Global Study Commons</span>
+        </div>
+      </a>
+
+      <!-- Search Bar (Desktop) -->
+      <div class="hidden md:flex flex-1 max-w-md mx-4">
+        <div class="relative w-full">
+          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Search research topics, assignments, universities..."
+            class="w-full pl-10 pr-4 py-2 text-sm rounded-xl bg-slate-100 dark:bg-navy-850 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition"
+          />
+        </div>
+      </div>
+
+      <!-- Right Action Controls -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Theme Toggle -->
+        <button id="themeToggleBtn" aria-label="Toggle Dark Mode" class="p-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-navy-850 border border-slate-200 dark:border-slate-700 transition">
+          <i id="themeIcon" class="fa-solid fa-moon text-sm"></i>
+        </button>
+
+        <!-- Post Button -->
+        <button id="openCreatePostBtn" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium shadow-sm transition">
+          <i class="fa-solid fa-plus text-xs"></i>
+          <span class="hidden sm:inline">Post Study / Question</span>
+          <span class="sm:hidden">Post</span>
+        </button>
+
+        <!-- Auth / Profile Area -->
+        <div id="authHeaderContainer">
+          <button id="openAuthModalBtn" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 dark:hover:bg-slate-700 text-white text-sm font-medium transition">
+            <i class="fa-solid fa-user-graduate text-xs text-emerald-400"></i>
+            <span>Student Sign In</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Search Bar -->
+    <div class="md:hidden px-4 pb-3">
+      <div class="relative w-full">
+        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+        <input
+          type="text"
+          id="mobileSearchInput"
+          placeholder="Search research topics, assignments, universities..."
+          class="w-full pl-10 pr-4 py-2 text-sm rounded-xl bg-slate-100 dark:bg-navy-850 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+        />
+      </div>
+    </div>
+  </header>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
+
+  <!-- Main Workspace Layout -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+      <!-- Left Sidebar: Academic Disciplines & Post Types -->
+      <aside class="lg:col-span-3 space-y-5">
+        <!-- Post Type Filter Card -->
+        <div class="bg-white dark:bg-navy-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800 shadow-sm">
+          <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-3 flex items-center gap-2">
+            <i class="fa-solid fa-filter text-emerald-600 dark:text-emerald-400"></i>
+            Contribution Type
+          </h2>
+          <div class="flex flex-wrap lg:flex-col gap-1.5" id="postTypeFilterList">
+            <button data-type="ALL" class="type-filter-btn active-type flex items-center justify-between w-full px-3 py-2 rounded-xl text-sm font-medium bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60 transition">
+              <span><i class="fa-solid fa-layer-group w-5 text-center mr-1.5"></i>All Submissions</span>
+              <span id="count-ALL" class="text-xs px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200">0</span>
+            </button>
+            <button data-type="Research Study" class="type-filter-btn flex items-center justify-between w-full px-3 py-2 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-navy-850 transition">
+              <span><i class="fa-solid fa-microscope w-5 text-center mr-1.5 text-indigo-500"></i>Research Study</span>
+              <span id="count-Research Study" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">0</span>
+            </button>
+            <button data-type="Assignment Help" class="type-filter-btn flex items-center justify-between w-full px-3 py-2 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-navy-850 transition">
+              <span><i class="fa-solid fa-file-pen w-5 text-center mr-1.5 text-amber-500"></i>Assignment Help</span>
+              <span id="count-Assignment Help" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">0</span>
+            </button>
+            <button data-type="General Question" class="type-filter-btn flex items-center justify-between w-full px-3 py-2 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-navy-850 transition">
+              <span><i class="fa-solid fa-circle-question w-5 text-center mr-1.5 text-emerald-500"></i>Study Question</span>
+              <span id="count-General Question" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">0</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Academic Categories Card -->
+        <div class="bg-white dark:bg-navy-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800 shadow-sm">
+          <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-3 flex items-center gap-2">
+            <i class="fa-solid fa-compass text-emerald-600 dark:text-emerald-400"></i>
+            Academic Fields
+          </h2>
+          <div class="flex flex-wrap lg:flex-col gap-1.5" id="categoryFilterList">
+            <!-- Populated dynamically via JS -->
+          </div>
+        </div>
+      </aside>
+
+      <!-- Center Feed: Global Academic Stream -->
+      <section class="lg:col-span-6 space-y-4">
+        <!-- Hero Banner inside feed -->
+        <div class="bg-gradient-to-r from-navy-900 via-slate-800 to-emerald-950 rounded-2xl p-5 text-white shadow-sm border border-slate-700/50 relative overflow-hidden">
+          <div class="relative z-10">
+            <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs font-medium mb-2.5">
+              <i class="fa-solid fa-earth-africa"></i>
+              <span>Global Peer-to-Peer Study Network</span>
+            </div>
+            <h1 class="font-serif text-xl sm:text-2xl font-bold leading-snug mb-1.5">
+              Collaborate on Research. Solve Tough Assignments Together.
+            </h1>
+            <p class="text-slate-300 text-xs sm:text-sm max-w-xl leading-relaxed">
+              Connect with university students across continents to peer-review research methodologies, debug technical coursework, and share scholarly insights.
+            </p>
+          </div>
+          <i class="fa-solid fa-atom absolute -right-4 -bottom-6 text-8xl text-white/5 pointer-events-none"></i>
+        </div>
+
+        <!-- Active Filter Status Bar -->
+        <div class="flex flex-wrap items-center justify-between gap-2 bg-white dark:bg-navy-900 px-4 py-3 rounded-2xl border border-slate-200 dark:border-slate-800">
+          <div class="text-sm text-slate-600 dark:text-slate-300">
+            Showing <span id="visiblePostsCount" class="font-bold text-slate-900 dark:text-white">0</span> academic threads
+            <span id="activeFilterLabel" class="text-xs text-emerald-600 dark:text-emerald-400 font-medium ml-1"></span>
+          </div>
+          <div class="flex items-center gap-2">
+            <label for="sortSelect" class="text-xs text-slate-500 dark:text-slate-400">Sort:</label>
+            <select id="sortSelect" class="text-xs bg-slate-100 dark:bg-navy-850 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5 focus:outline-none">
+              <option value="newest">Most Recent</option>
+              <option value="popular">Most Upvoted</option>
+              <option value="discussed">Most Answered</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Feed Container -->
+        <div id="postsFeedContainer" class="space-y-4">
+          <!-- Loading Skeletons -->
+          <div class="bg-white dark:bg-navy-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 animate-pulse space-y-3">
+            <div class="h-4 bg-slate-200 dark:bg-slate-800 rounded w-1/3"></div>
+            <div class="h-6 bg-slate-200 dark:bg-slate-800 rounded w-3/4"></div>
+            <div class="h-16 bg-slate-200 dark:bg-slate-800 rounded w-full"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Sidebar: Student Profile Card & Global Stats -->
+      <aside class="lg:col-span-3 space-y-5">
+        <!-- Student Profile Summary Card -->
+        <div id="sidebarProfileCard" class="bg-white dark:bg-navy-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm">
+          <!-- Dynamically rendered based on user state -->
+        </div>
+
+        <!-- Global Study Commons Metrics -->
+        <div class="bg-white dark:bg-navy-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm">
+          <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-3 flex items-center gap-2">
+            <i class="fa-solid fa-globe text-emerald-600 dark:text-emerald-400"></i>
+            Global Commons Pulse
+          </h3>
+          <div class="grid grid-cols-2 gap-3 text-center">
+            <div class="p-3 rounded-xl bg-slate-50 dark:bg-navy-850 border border-slate-100 dark:border-slate-800">
+              <div id="statTotalThreads" class="text-xl font-bold text-slate-900 dark:text-white">0</div>
+              <div class="text-[11px] text-slate-500 dark:text-slate-400">Study Threads</div>
+            </div>
+            <div class="p-3 rounded-xl bg-slate-50 dark:bg-navy-850 border border-slate-100 dark:border-slate-800">
+              <div id="statTotalAnswers" class="text-xl font-bold text-emerald-600 dark:text-emerald-400">0</div>
+              <div class="text-[11px] text-slate-500 dark:text-slate-400">Peer Solutions</div>
+            </div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
+            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+              <i class="fa-solid fa-shield-halved text-emerald-500 mr-1"></i>
+              All discussions are archived for open educational reference across partner institutions worldwide.
+            </p>
+          </div>
+        </div>
+
+        <!-- Study Guidelines Quick Box -->
+        <div class="bg-emerald-50/70 dark:bg-emerald-950/20 rounded-2xl p-5 border border-emerald-200/80 dark:border-emerald-800/40">
+          <h3 class="text-sm font-bold text-emerald-900 dark:text-emerald-300 mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-lightbulb"></i>
+            How to Get Great Peer Help
+          </h3>
+          <ul class="text-xs text-emerald-800 dark:text-emerald-200/80 space-y-2 list-disc pl-4">
+            <li>Include your university course context or research methodology.</li>
+            <li>Show what steps, formulas, or code you have already attempted.</li>
+            <li>Cite papers, RFCs, or textbooks when referencing external data.</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white dark:bg-navy-900 border-t border-slate-200 dark:border-slate-800 mt-12 py-6 px-4">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
+      <div class="flex items-center gap-2">
+        <i class="fa-solid fa-book-open-reader text-emerald-600 dark:text-emerald-400"></i>
+        <span><strong>ScholarHub</strong> — Built strictly for global student research, peer tutoring & academic collaboration.</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <button id="footerIntegrityBtn" class="hover:text-emerald-600 dark:hover:text-emerald-400 underline">Academic Honor Code</button>
+        <span>&copy; 2026 ScholarHub Open Education</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 1: STUDENT AUTHENTICATION / PROFILE SETUP                       -->
+  <!-- ===================================================================== -->
+  <div id="authModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/70 backdrop-blur-sm p-4 overflow-y-auto">
+    <div class="bg-white dark:bg-navy-900 rounded-2xl max-w-md w-full p-6 border border-slate-200 dark:border-slate-800 shadow-2xl relative my-8">
+      <button id="closeAuthModalBtn" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+          <i class="fa-solid fa-user-graduate text-lg"></i>
+        </div>
+        <div>
+          <h2 id="authModalTitle" class="text-lg font-bold text-slate-900 dark:text-white">Student Academic Profile</h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400">Create or update your verified student study identity</p>
+        </div>
+      </div>
+
+      <form id="studentProfileForm" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Full Name *</label>
+          <input type="text" id="profName" required placeholder="e.g., Amina Kiprop"
+            class="w-full px-3.5 py-2.5 text-sm rounded-xl bg-slate-50 dark:bg-navy-850 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">University / Academic Institution *</label>
+          <input type="text" id="profUniversity" required placeholder="e.g., University of Eldoret"
+            class="w-full px-3.5 py-2.5 text-sm rounded-xl bg-slate-50 dark:bg-navy-850 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Country *</label>
+            <input type="text" id="profCountry" required placeholder="e.g., Kenya"
+              class="w-full px-3.5 py-2.5 text-sm rounded-xl bg-slate-50 dark:bg-navy-850 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Academic Level</label>
+            <select id="profLevel"
+              class="w-full px-3.5 py-2.5 text-sm rounded-xl bg-slate-50 dark:bg-navy-850 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+              <option value="Undergraduate">Undergraduate</option>
+              <option value="Masters / Postgraduate">Masters / Postgraduate</option>
+              <option value="PhD / Doctoral Researcher">PhD / Doctoral Researcher</option>
+              <option value="Diploma / Technical">Diploma / Technical</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Primary Field of Study *</label>
+          <select id="profField" required
+            class="w-full px-3.5 py-2.5 text-sm rounded-xl bg-slate-50 dark:bg-navy-850 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            <option value="Computer Science & Networking">Computer Science & Networking</option>
+            <option value="Engineering">Engineering</option>
+            <option value="Agriculture & Agribusiness">Agriculture & Agribusiness</option>
+            <option value="Health Sciences">Health Sciences</option>
+            <option value="Business & Economics">Business & Economics</option>
+            <option value="Mathematics">Mathematics</option>
+            <option value="General Research">General Research</option>
+          </select>
+        </div>
+
+        <div class="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/50 text-xs text-amber-800 dark:text-amber-300 flex items-start gap-2">
+          <input type="checkbox" id="profPledge" required class="mt-0.5 rounded text-emerald-600 focus:ring-emerald-500" />
+          <label for="profPledge">
+            I pledge to use ScholarHub strictly for educational study, research collaboration, and ethical peer learning.
+          </label>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2">
+          <button type="button" id="signOutBtn" class="hidden mr-auto text-xs text-rose-600 dark:text-rose-400 hover:underline font-medium">
+            Sign Out Profile
+          </button>
+          <button type="button" id="cancelAuthBtn" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-navy-850">
+            Cancel
+          </button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold shadow-sm transition">
+            Save Student Profile
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 2: CREATE RESEARCH STUDY / ASSIGNMENT / QUESTION                -->
+  <!-- ===================================================================== -->
+  <div id="createPostModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/70 backdrop-blur-sm p-4 overflow-y-auto">
+    <div class="bg-white dark:bg-navy-900 rounded-2xl max-w-2xl w-full p-6 border border-slate-200 dark:border-slate-800 shadow-2xl relative my-8">
+      <button id="closeCreatePostBtn" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+
+      <div class="mb-4">
+        <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+          <i class="fa-solid fa-pen-to-square text-emerald-600 dark:text-emerald-400"></i>
+          Publish Academic Study or Question
+        </h2>
+        <p class="text-xs text-slate-500 dark:text-slate-400">Share a research abstract, assignment problem, or study inquiry with students worldwide.</p>
+      </div>
+
+      <form id="createPostForm" class="space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Contribution Type *</label>
+            <select id="postTypeInput" required
+              class="w-full px-3.5 py-2.5 text-sm rounded-xl bg-slate-50 dark:bg-navy-850 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+              <option value="Research Study">Research Study / Paper</option>
+              <option value="Assignment Help">Assignment Discussion</option>
+              <option value="General Question">General Study Question</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Academic Field *</label>
+            <select id="postCategoryInput" required
+              class="w-full px-3.5 py-2.5 text-sm rounded-xl bg-slate-50 dark:bg-navy-850 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+              <option value="Computer Science & Networking">Computer Science & Networking</option>
+              <option value="Engineering">Engineering</option>
+              <option value="Agriculture & Agribusiness">Agriculture & Agribusiness</option>
+              <option value="Health Sciences">Health Sciences</option>
+              <option value="Business & Economics">Business & Economics</option>
+              <option value="Mathematics">Mathematics</option>
+              <option value="General Research">General Research</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Topic / Question Title *</label>
+          <input type="text" id="postTitleInput" required maxlength="160"
+            placeholder="e.g., Optimizing OSPF Area Design for Multi-Campus Enterprise Networks"
+            class="w-full px-3.5 py-2.5 text-sm rounded-xl bg-slate-50 dark:bg-navy-850 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Detailed Description, Methodology, or Code *</label>
+          <textarea id="postContentInput" required rows="5"
+            placeholder="Describe your research hypothesis, assignment question, equations, or steps you have already tried..."
+            class="w-full px-3.5 py-2.5 text-sm rounded-xl bg-slate-50 dark:bg-navy-850 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">References, Citations, or Course Code (Optional)</label>
+          <input type="text" id="postRefInput"
+            placeholder="e.g., IEEE 802.11ax Standard, RFC 2328, or Course: NET-402"
+            class="w-full px-3.5 py-2.5 text-sm rounded-xl bg-slate-50 dark:bg-navy-850 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+          <button type="button" id="cancelCreatePostBtn" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-navy-850">
+            Cancel
+          </button>
+          <button type="submit" id="submitPostBtn" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold shadow-sm transition">
+            Publish to Commons
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 3: POST DETAIL & PEER-TO-PEER ANSWERS                           -->
+  <!-- ===================================================================== -->
+  <div id="postDetailModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/75 backdrop-blur-sm p-4 overflow-y-auto">
+    <div class="bg-white dark:bg-navy-900 rounded-2xl max-w-3xl w-full p-6 border border-slate-200 dark:border-slate-800 shadow-2xl relative my-8 max-h-[90vh] overflow-y-auto">
+      <button id="closeDetailModalBtn" class="sticky top-0 float-right z-10 bg-slate-100 dark:bg-navy-850 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-full w-8 h-8 flex items-center justify-center text-slate-500 dark:text-slate-300">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Dynamic Post Details -->
+      <div id="detailPostBody" class="pr-6"></div>
+
+      <!-- Peer Answers Section -->
+      <div class="mt-6 pt-6 border-t border-slate-200 dark:border-slate-800">
+        <h3 class="text-base font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+          <i class="fa-solid fa-comments text-emerald-600 dark:text-emerald-400"></i>
+          Peer Study Responses & Research Feedback (<span id="detailAnswerCount">0</span>)
+        </h3>
+
+        <div id="detailAnswersList" class="space-y-3 mb-6">
+          <!-- Answers populated here -->
+        </div>
+
+        <!-- Submit New Answer Form -->
+        <form id="submitAnswerForm" class="bg-slate-50 dark:bg-navy-850 p-4 rounded-2xl border border-slate-200 dark:border-slate-700/80 space-y-3">
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+            Contribute a Peer Answer or Academic Explanation
+          </label>
+          <textarea id="newAnswerInput" required rows="3"
+            placeholder="Write a clear, constructive explanation, methodology tip, or step-by-step guidance..."
+            class="w-full px-3.5 py-2.5 text-sm rounded-xl bg-white dark:bg-navy-900 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500"></textarea>
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <span class="text-[11px] text-slate-500 dark:text-slate-400">
+              <i class="fa-solid fa-circle-info text-emerald-500 mr-1"></i>
+              Explain concepts clearly rather than just posting raw final answers.
+            </span>
+            <button type="submit" id="submitAnswerBtn" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-sm transition self-end sm:self-auto">
+              Post Peer Response
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 4: ACADEMIC HONOR CODE & STUDY GUIDELINES                       -->
+  <!-- ===================================================================== -->
+  <div id="integrityModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/70 backdrop-blur-sm p-4 overflow-y-auto">
+    <div class="bg-white dark:bg-navy-900 rounded-2xl max-w-lg w-full p-6 border border-slate-200 dark:border-slate-800 shadow-2xl relative">
+      <button id="closeIntegrityModalBtn" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+          <i class="fa-solid fa-scale-balanced text-lg"></i>
+        </div>
+        <div>
+          <h2 class="text-lg font-bold text-slate-900 dark:text-white">ScholarHub Academic Honor Code</h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400">Global Standards for Ethical Peer Learning</p>
+        </div>
+      </div>
+
+      <div class="space-y-3 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+        <p>
+          <strong>1. Strictly Educational & Research Purpose:</strong> ScholarHub exists solely to connect students worldwide for academic study, research feedback, and conceptual problem-solving.
+        </p>
+        <p>
+          <strong>2. Guided Mentorship Over Direct Copying:</strong> When assisting with assignments, explain underlying principles, formulas, debugging steps, and citations so peers genuinely learn.
+        </p>
+        <p>
+          <strong>3. Proper Attribution:</strong> Always cite published papers, datasets, RFCs, or textbooks when sharing literature reviews or empirical findings.
+        </p>
+        <p>
+          <strong>4. Respectful Global Discourse:</strong> Engage constructively with students from all universities, regions, and academic backgrounds.
+        </p>
+      </div>
+
+      <div class="mt-6 flex justify-end">
+        <button id="acceptIntegrityBtn" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold">
+          I Understand & Agree
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase & Application Logic -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, addDoc, updateDoc, onSnapshot, collection, increment, arrayUnion } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    // =========================================================================
+    // 1. INITIALIZATION & GLOBAL STATE
+    // =========================================================================
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'scholarhub-global-commons';
+    const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+
+    let app = null;
+    let auth = null;
+    let db = null;
+    let currentUser = null;
+    let userProfile = null;
+    let allPosts = [];
+    let selectedPostId = null;
+    let activeUnsubscribeAnswers = null;
+
+    // Filter states
+    let currentCategory = 'ALL';
+    let currentType = 'ALL';
+    let currentSearch = '';
+    let currentSort = 'newest';
+
+    const CATEGORIES = [
+      { name: 'ALL', label: 'All Disciplines', icon: 'fa-border-all' },
+      { name: 'Computer Science & Networking', label: 'CS & Networking', icon: 'fa-network-wired' },
+      { name: 'Engineering', label: 'Engineering', icon: 'fa-gears' },
+      { name: 'Agriculture & Agribusiness', label: 'Agriculture & Food', icon: 'fa-seedling' },
+      { name: 'Health Sciences', label: 'Health Sciences', icon: 'fa-stethoscope' },
+      { name: 'Business & Economics', label: 'Business & Econ', icon: 'fa-chart-line' },
+      { name: 'Mathematics', label: 'Mathematics', icon: 'fa-square-root-variable' },
+      { name: 'General Research', label: 'General Research', icon: 'fa-book-atlas' },
+    ];
+
+    // Pre-populated global student posts so the commons feels active immediately
+    const SEED_POSTS = [
+      {
+        id: 'seed-1',
+        title: 'Mitigating Co-Channel Interference in High-Density University Campus WLANs (IEEE 802.11ax)',
+        type: 'Research Study',
+        category: 'Computer Science & Networking',
+        content: 'For my final-year Network Management research project, I am measuring throughput degradation across university lecture halls during peak student occupancy. We tested dynamic channel assignment (DCA) and transmit power control (TPC) across 24 access points.\n\nHas anyone modeled BSS Coloring in 802.11ax (Wi-Fi 6) using NS-3 or MATLAB to quantify SNR improvements before physical deployment?',
+        reference: 'IEEE Std 802.11ax-2021; Cisco Enterprise Mobility 8.5 Design Guide',
+        authorName: 'Brian Kipchoge',
+        authorUniversity: 'University of Eldoret',
+        authorCountry: 'Kenya',
+        authorLevel: 'Undergraduate',
+        upvotes: 24,
+        answerCount: 2,
+        createdAt: Date.now() - 1000 * 60 * 60 * 3,
+        seedAnswers: [
+          {
+            id: 'ans-s1-1',
+            authorName: 'Mei-Ling Chen',
+            authorUniversity: 'National Taiwan University',
+            authorCountry: 'Taiwan',
+            content: 'Great research topic! In NS-3 (version 3.37+), you can enable BSS Coloring via `WifiMacHelper` and configure `ObssPdAlgorithm` (ConstantObssPdAlgorithm). Make sure you set realistic wall attenuation loss models (`HybridBuildingsPropagationLossModel`) so your simulation reflects concrete lecture hall walls.',
+            upvotes: 11,
+            createdAt: Date.now() - 1000 * 60 * 60 * 2
+          },
+          {
+            id: 'ans-s1-2',
+            authorName: 'Lucas Lindqvist',
+            authorUniversity: 'KTH Royal Institute of Technology',
+            authorCountry: 'Sweden',
+            content: 'Also consider disabling lower legacy data rates (1, 2, 5.5, and 11 Mbps) on the 2.4 GHz band and enforcing 20 MHz channel widths on 5 GHz. Reducing management frame overhead often yields a 15-20% airtime improvement in dense auditoriums.',
+            upvotes: 8,
+            createdAt: Date.now() - 1000 * 60 * 45
+          }
+        ]
+      },
+      {
+        id: 'seed-2',
+        title: 'Soil Moisture Sensor Calibration & IoT LoRaWAN Packet Loss in Smallholder Maize Farms',
+        type: 'Research Study',
+        category: 'Agriculture & Agribusiness',
+        content: 'Our agronomy and agricultural engineering group is evaluating low-cost capacitive soil moisture sensors paired with LoRaWAN nodes across a 12-hectare test plot. We noticed volumetric water content (VWC) readings drift in clay-loam soils after heavy rainfall.\n\nWhat gravimetric calibration curves or temperature compensation formulas have fellow researchers found most reliable?',
+        reference: 'FAO Irrigation and Drainage Paper No. 56',
+        authorName: 'Faith Wanjiku',
+        authorUniversity: 'Egerton University',
+        authorCountry: 'Kenya',
+        authorLevel: 'Masters / Postgraduate',
+        upvotes: 19,
+        answerCount: 1,
+        createdAt: Date.now() - 1000 * 60 * 60 * 8,
+        seedAnswers: [
+          {
+            id: 'ans-s2-1',
+            authorName: 'Mateo Alvarez',
+            authorUniversity: 'Zamorano Pan-American Agricultural School',
+            authorCountry: 'Honduras',
+            content: 'Capacitive sensors are sensitive to soil bulk electrical conductivity and temperature. We solved this by taking 5 oven-dried gravimetric soil samples across moisture gradients to fit a third-order polynomial regression specific to clay-loam, plus adding a DS18B20 soil temperature probe to normalize raw ADC values.',
+            upvotes: 9,
+            createdAt: Date.now() - 1000 * 60 * 60 * 5
+          }
+        ]
+      },
+      {
+        id: 'seed-3',
+        title: 'Assignment Help: Understanding Time Complexity of Dijkstra’s Algorithm with a Fibonacci Heap vs Binary Heap',
+        type: 'Assignment Help',
+        category: 'Mathematics',
+        content: 'In our Data Structures & Algorithms coursework, we need to prove why Dijkstra’s shortest-path algorithm improves from O((V + E) log V) using a standard binary min-heap to O(E + V log V) using a Fibonacci heap.\n\nI understand extract-min takes O(log V) amortized, but could someone clarify why decrease-key takes O(1) amortized time in cascading cuts?',
+        reference: 'Cormen et al. (CLRS), Introduction to Algorithms, Ch. 19 & 24',
+        authorName: 'Arjun Sharma',
+        authorUniversity: 'IIT Madras',
+        authorCountry: 'India',
+        authorLevel: 'Undergraduate',
+        upvotes: 31,
+        answerCount: 1,
+        createdAt: Date.now() - 1000 * 60 * 60 * 14,
+        seedAnswers: [
+          {
+            id: 'ans-s3-1',
+            authorName: 'Hannah O’Connor',
+            authorUniversity: 'Trinity College Dublin',
+            authorCountry: 'Ireland',
+            content: 'Think of the potential function Φ(H) = t(H) + 2m(H), where t(H) is the number of root trees and m(H) is the number of marked nodes. Each cascading cut removes a marked node (decreasing m(H) by 1, freeing 2 units of potential) while adding 1 tree to the root list (+1 potential). That net drop pays for the O(1) cut operation!',
+            upvotes: 17,
+            createdAt: Date.now() - 1000 * 60 * 60 * 11
+          }
+        ]
+      },
+      {
+        id: 'seed-4',
+        title: 'Systematic Review Protocol: Antimicrobial Resistance Patterns in Rural Outpatient Clinics',
+        type: 'General Question',
+        category: 'Health Sciences',
+        content: 'We are drafting a PRISMA-compliant systematic review protocol examining empirical antibiotic prescribing trends in primary healthcare clinics. Should we restrict our inclusion criteria strictly to studies utilizing CLSI/EUCAST standardized disc diffusion methods, or include automated VITEK system reports as well?',
+        reference: 'PRISMA 2020 Statement; WHO Global Antimicrobial Resistance Surveillance System (GLASS)',
+        authorName: 'Dr. Clara Mensah',
+        authorUniversity: 'University of Ghana',
+        authorCountry: 'Ghana',
+        authorLevel: 'PhD / Doctoral Researcher',
+        upvotes: 15,
+        answerCount: 0,
+        createdAt: Date.now() - 1000 * 60 * 60 * 22,
+        seedAnswers: []
+      }
+    ];
+
+    // =========================================================================
+    // 2. THEME & UI HELPERS
+    // =========================================================================
+    function initTheme() {
+      const htmlEl = document.documentElement;
+      const themeIcon = document.getElementById('themeIcon');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (prefersDark) {
+        htmlEl.classList.add('dark');
+        themeIcon.classList.replace('fa-moon', 'fa-sun');
+      }
+
+      document.getElementById('themeToggleBtn').addEventListener('click', () => {
+        htmlEl.classList.toggle('dark');
+        const isDark = htmlEl.classList.contains('dark');
+        themeIcon.className = isDark ? 'fa-solid fa-sun text-sm text-amber-400' : 'fa-solid fa-moon text-sm';
+      });
+    }
+
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      const colors = type === 'error'
+        ? 'bg-rose-600 text-white border-rose-500'
+        : type === 'info'
+        ? 'bg-slate-900 text-white border-slate-700'
+        : 'bg-emerald-600 text-white border-emerald-500';
+      const icon = type === 'error' ? 'fa-circle-exclamation' : type === 'info' ? 'fa-circle-info' : 'fa-circle-check';
+
+      toast.className = `pointer-events-auto flex items-center gap-2.5 px-4 py-3 rounded-xl shadow-lg border text-xs sm:text-sm font-medium transition-all transform translate-y-2 opacity-0 ${colors}`;
+      toast.innerHTML = `<i class="fa-solid ${icon}"></i><span>${escapeHTML(message)}</span>`;
+      container.appendChild(toast);
+
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+      });
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    function escapeHTML(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function timeAgo(timestamp) {
+      const seconds = Math.floor((Date.now() - timestamp) / 1000);
+      if (seconds < 60) return 'Just now';
+      const minutes = Math.floor(seconds / 60);
+      if (minutes < 60) return `${minutes}m ago`;
+      const hours = Math.floor(minutes / 60);
+      if (hours < 24) return `${hours}h ago`;
+      const days = Math.floor(hours / 24);
+      return `${days}d ago`;
+    }
+
+    function getBadgeStyle(type) {
+      switch (type) {
+        case 'Research Study':
+          return 'bg-indigo-50 text-indigo-700 border-indigo-200 dark:bg-indigo-950/60 dark:text-indigo-300 dark:border-indigo-800/60';
+        case 'Assignment Help':
+          return 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800/60';
+        default:
+          return 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800/60';
+      }
+    }
+
+    // =========================================================================
+    // 3. FIREBASE AUTHENTICATION & DATA PERSISTENCE
+    // =========================================================================
+    async function initFirebase() {
+      if (!firebaseConfig) {
+        // Fallback in-memory mode if environment config is absent
+        allPosts = [...SEED_POSTS];
+        renderCategories();
+        renderProfileUI();
+        renderFeed();
+        return;
+      }
+
+      try {
+        app = initializeApp(firebaseConfig);
+        auth = getAuth(app);
+        db = getFirestore(app);
+
+        // RULE 3: Authenticate BEFORE running any Firestore queries
+        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+          await signInWithCustomToken(auth, __initial_auth_token);
+        } else {
+          await signInAnonymously(auth);
+        }
+
+        onAuthStateChanged(auth, async (user) => {
+          currentUser = user;
+          if (user) {
+            await loadUserProfile(user.uid);
+            subscribeToPosts();
+          }
+        });
+      } catch (err) {
+        console.error('Firebase initialization error:', err);
+        allPosts = [...SEED_POSTS];
+        renderCategories();
+        renderProfileUI();
+        renderFeed();
+      }
+    }
+
+    async function loadUserProfile(uid) {
+      if (!db || !uid) return;
+      try {
+        // RULE 1: Strict private user path
+        const profileRef = doc(db, 'artifacts', appId, 'users', uid, 'profile', 'studentInfo');
+        const snap = await getDoc(profileRef);
+        if (snap.exists()) {
+          userProfile = snap.data();
+        } else {
+          userProfile = null;
+        }
+      } catch (err) {
+        console.error('Error loading profile:', err);
+      }
+      renderProfileUI();
+    }
+
+    function subscribeToPosts() {
+      if (!db || !currentUser) return;
+      // RULE 1 & RULE 2: Simple public collection query without compound orderBy/where
+      const postsCol = collection(db, 'artifacts', appId, 'public', 'data', 'scholar_posts');
+      onSnapshot(
+        postsCol,
+        (snapshot) => {
+          const firestorePosts = [];
+          snapshot.forEach((docSnap) => {
+            firestorePosts.push({ id: docSnap.id, ...docSnap.data() });
+          });
+          // Merge live Firestore posts with global seed posts
+          allPosts = [...firestorePosts, ...SEED_POSTS];
+          renderFeed();
+        },
+        (error) => {
+          console.error('Error listening to posts:', error);
+          allPosts = [...SEED_POSTS];
+          renderFeed();
+        }
+      );
+    }
+
+    // =========================================================================
+    // 4. RENDERING FUNCTIONS (UI COMPONENTS)
+    // =========================================================================
+    function renderCategories() {
+      const container = document.getElementById('categoryFilterList');
+      container.innerHTML = CATEGORIES.map((cat) => {
+        const isActive = currentCategory === cat.name;
+        const activeClasses = isActive
+          ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60 font-semibold'
+          : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-navy-850 font-medium';
+        return `
+          <button data-category="${escapeHTML(cat.name)}" class="cat-filter-btn flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs sm:text-sm transition ${activeClasses}">
+            <i class="fa-solid ${cat.icon} w-4 text-center ${isActive ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400'}"></i>
+            <span class="truncate">${escapeHTML(cat.label)}</span>
+          </button>
+        `;
+      }).join('');
+
+      container.querySelectorAll('.cat-filter-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          currentCategory = btn.getAttribute('data-category');
+          renderCategories();
+          renderFeed();
+        });
+      });
+    }
+
+    function renderProfileUI() {
+      const headerContainer = document.getElementById('authHeaderContainer');
+      const sidebarCard = document.getElementById('sidebarProfileCard');
+
+      if (userProfile) {
+        const initials = userProfile.name
+          .split(' ')
+          .map((n) => n[0])
+          .join('')
+          .substring(0, 2)
+          .toUpperCase();
+
+        headerContainer.innerHTML = `
+          <button id="editProfileHeaderBtn" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-navy-850 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs sm:text-sm font-medium transition">
+            <span class="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-bold">${escapeHTML(initials)}</span>
+            <span class="hidden sm:inline max-w-[120px] truncate">${escapeHTML(userProfile.name)}</span>
+          </button>
+        `;
+        document.getElementById('editProfileHeaderBtn').addEventListener('click', openAuthModal);
+
+        sidebarCard.innerHTML = `
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-600 to-teal-700 text-white flex items-center justify-center font-bold text-lg shadow-sm">
+              ${escapeHTML(initials)}
+            </div>
+            <div class="min-w-0">
+              <h3 class="font-bold text-slate-900 dark:text-white text-sm truncate">${escapeHTML(userProfile.name)}</h3>
+              <p class="text-xs text-emerald-600 dark:text-emerald-400 font-medium truncate">${escapeHTML(userProfile.level)}</p>
+            </div>
+          </div>
+          <div class="space-y-1.5 text-xs text-slate-600 dark:text-slate-300 border-t border-slate-100 dark:border-slate-800 pt-3">
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-building-columns text-slate-400 w-4 text-center"></i>
+              <span class="truncate">${escapeHTML(userProfile.university)}</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-location-dot text-slate-400 w-4 text-center"></i>
+              <span>${escapeHTML(userProfile.country)}</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-book-bookmark text-slate-400 w-4 text-center"></i>
+              <span class="truncate">${escapeHTML(userProfile.field)}</span>
+            </div>
+          </div>
+          <button id="sidebarEditProfileBtn" class="mt-4 w-full py-2 rounded-xl bg-slate-100 dark:bg-navy-850 hover:bg-slate-200 dark:hover:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 transition">
+            Edit Academic Profile
+          </button>
+        `;
+        document.getElementById('sidebarEditProfileBtn').addEventListener('click', openAuthModal);
+      } else {
+        headerContainer.innerHTML = `
+          <button id="openAuthModalBtn" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 dark:hover:bg-slate-700 text-white text-sm font-medium transition">
+            <i class="fa-solid fa-user-graduate text-xs text-emerald-400"></i>
+            <span>Student Sign In</span>
+          </button>
+        `;
+        document.getElementById('openAuthModalBtn').addEventListener('click', openAuthModal);
+
+        sidebarCard.innerHTML = `
+          <div class="text-center py-2">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto mb-3">
+              <i class="fa-solid fa-id-card-clip text-xl"></i>
+            </div>
+            <h3 class="font-bold text-slate-900 dark:text-white text-sm mb-1">Join the Global Study Commons</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mb-4 leading-relaxed">
+              Create your student profile with your university and field of study to publish research and answer peer questions.
+            </p>
+            <button id="sidebarCreateProfileBtn" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-sm transition">
+              Create Student Account
+            </button>
+          </div>
+        `;
+        document.getElementById('sidebarCreateProfileBtn').addEventListener('click', openAuthModal);
+      }
+    }
+
+    function renderFeed() {
+      // Update global metrics
+      document.getElementById('statTotalThreads').textContent = allPosts.length;
+      const totalAnswers = allPosts.reduce((sum, p) => sum + (p.answerCount || (p.seedAnswers ? p.seedAnswers.length : 0)), 0);
+      document.getElementById('statTotalAnswers').textContent = totalAnswers;
+
+      // Update type counts
+      document.getElementById('count-ALL').textContent = allPosts.length;
+      ['Research Study', 'Assignment Help', 'General Question'].forEach((t) => {
+        const el = document.getElementById(`count-${t}`);
+        if (el) el.textContent = allPosts.filter((p) => p.type === t).length;
+      });
+
+      // Filter posts in memory
+      let filtered = allPosts.filter((post) => {
+        const matchesCat = currentCategory === 'ALL' || post.category === currentCategory;
+        const matchesType = currentType === 'ALL' || post.type === currentType;
+        const q = currentSearch.trim().toLowerCase();
+        const matchesSearch =
+          !q ||
+          post.title.toLowerCase().includes(q) ||
+          post.content.toLowerCase().includes(q) ||
+          (post.authorUniversity && post.authorUniversity.toLowerCase().includes(q)) ||
+          (post.authorCountry && post.authorCountry.toLowerCase().includes(q)) ||
+          (post.category && post.category.toLowerCase().includes(q));
+        return matchesCat && matchesType && matchesSearch;
+      });
+
+      // Sort in memory
+      filtered.sort((a, b) => {
+        if (currentSort === 'popular') return (b.upvotes || 0) - (a.upvotes || 0);
+        if (currentSort === 'discussed') {
+          const ansA = a.answerCount || (a.seedAnswers ? a.seedAnswers.length : 0);
+          const ansB = b.answerCount || (b.seedAnswers ? b.seedAnswers.length : 0);
+          return ansB - ansA;
+        }
+        return (b.createdAt || 0) - (a.createdAt || 0);
+      });
+
+      document.getElementById('visiblePostsCount').textContent = filtered.length;
+      const activeParts = [];
+      if (currentCategory !== 'ALL') activeParts.push(currentCategory);
+      if (currentType !== 'ALL') activeParts.push(currentType);
+      document.getElementById('activeFilterLabel').textContent = activeParts.length ? `• ${activeParts.join(' / ')}` : '';
+
+      const feedContainer = document.getElementById('postsFeedContainer');
+      if (filtered.length === 0) {
+        feedContainer.innerHTML = `
+          <div class="bg-white dark:bg-navy-900 rounded-2xl p-10 text-center border border-slate-200 dark:border-slate-800">
+            <i class="fa-solid fa-magnifying-glass text-3xl text-slate-300 dark:text-slate-600 mb-3"></i>
+            <h3 class="font-bold text-slate-900 dark:text-white text-base mb-1">No matching academic threads found</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Try adjusting your search keywords or start a new study discussion.</p>
+            <button id="emptyStatePostBtn" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold">
+              Post a New Study Question
+            </button>
+          </div>
+        `;
+        document.getElementById('emptyStatePostBtn').addEventListener('click', openCreatePostModal);
+        return;
+      }
+
+      feedContainer.innerHTML = filtered
+        .map((post) => {
+          const badgeClass = getBadgeStyle(post.type);
+          const ansCount = post.answerCount !== undefined ? post.answerCount : post.seedAnswers ? post.seedAnswers.length : 0;
+          return `
+            <article class="bg-white dark:bg-navy-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 hover:border-emerald-400/70 dark:hover:border-emerald-600/60 shadow-sm transition group">
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${badgeClass}">
+                    ${escapeHTML(post.type)}
+                  </span>
+                  <span class="text-xs font-medium text-slate-500 dark:text-slate-400">
+                    ${escapeHTML(post.category)}
+                  </span>
+                </div>
+                <span class="text-xs text-slate-400">${timeAgo(post.createdAt)}</span>
+              </div>
+
+              <h2 data-post-id="${escapeHTML(post.id)}" class="open-post-trigger font-serif font-bold text-base sm:text-lg text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 cursor-pointer transition mb-2 leading-snug">
+                ${escapeHTML(post.title)}
+              </h2>
+
+              <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 line-clamp-3 leading-relaxed mb-4">
+                ${escapeHTML(post.content)}
+              </p>
+
+              ${
+                post.reference
+                  ? `<div class="mb-4 px-3 py-1.5 rounded-lg bg-slate-50 dark:bg-navy-850 border border-slate-100 dark:border-slate-800 text-[11px] text-slate-500 dark:text-slate-400 truncate">
+                      <i class="fa-solid fa-quote-left text-emerald-500 mr-1.5"></i>Ref: ${escapeHTML(post.reference)}
+                    </div>`
+                  : ''
+              }
+
+              <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100 dark:border-slate-800">
+                <div class="flex items-center gap-2 text-xs">
+                  <div class="w-7 h-7 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 flex items-center justify-center font-bold text-[11px]">
+                    ${escapeHTML((post.authorName || 'S')[0].toUpperCase())}
+                  </div>
+                  <div>
+                    <div class="font-semibold text-slate-800 dark:text-slate-200">${escapeHTML(post.authorName)}</div>
+                    <div class="text-[11px] text-slate-500 dark:text-slate-400">
+                      ${escapeHTML(post.authorUniversity)} • ${escapeHTML(post.authorCountry)}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-2">
+                  <button data-upvote-id="${escapeHTML(post.id)}" class="upvote-post-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-navy-850 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 text-xs font-semibold transition">
+                    <i class="fa-solid fa-arrow-up"></i>
+                    <span>${post.upvotes || 0}</span>
+                  </button>
+                  <button data-post-id="${escapeHTML(post.id)}" class="open-post-trigger inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 text-xs font-semibold transition">
+                    <i class="fa-regular fa-comment-dots"></i>
+                    <span>${ansCount} ${ansCount === 1 ? 'Answer' : 'Answers'}</span>
+                  </button>
+                </div>
+              </div>
+            </article>
+          `;
+        })
+        .join('');
+
+      // Attach post click listeners
+      feedContainer.querySelectorAll('.open-post-trigger').forEach((el) => {
+        el.addEventListener('click', () => openPostDetail(el.getAttribute('data-post-id')));
+      });
+
+      feedContainer.querySelectorAll('.upvote-post-btn').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          handleUpvotePost(btn.getAttribute('data-upvote-id'));
+        });
+      });
+    }
+
+    // =========================================================================
+    // 5. INTERACTIVE WORKFLOWS (PROFILE, CREATE POST, DETAIL & ANSWERS)
+    // =========================================================================
+    function openAuthModal() {
+      const modal = document.getElementById('authModal');
+      if (userProfile) {
+        document.getElementById('profName').value = userProfile.name || '';
+        document.getElementById('profUniversity').value = userProfile.university || '';
+        document.getElementById('profCountry').value = userProfile.country || '';
+        document.getElementById('profLevel').value = userProfile.level || 'Undergraduate';
+        document.getElementById('profField').value = userProfile.field || 'Computer Science & Networking';
+        document.getElementById('profPledge').checked = true;
+        document.getElementById('signOutBtn').classList.remove('hidden');
+      } else {
+        document.getElementById('studentProfileForm').reset();
+        document.getElementById('signOutBtn').classList.add('hidden');
+      }
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeAuthModal() {
+      const modal = document.getElementById('authModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    async function handleSaveProfile(e) {
+      e.preventDefault();
+      const profileData = {
+        name: document.getElementById('profName').value.trim(),
+        university: document.getElementById('profUniversity').value.trim(),
+        country: document.getElementById('profCountry').value.trim(),
+        level: document.getElementById('profLevel').value,
+        field: document.getElementById('profField').value,
+        updatedAt: Date.now(),
+      };
+
+      userProfile = profileData;
+      renderProfileUI();
+      closeAuthModal();
+      showToast(`Welcome, ${profileData.name}! Your student profile is active.`);
+
+      if (db && currentUser) {
+        try {
+          const profileRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'profile', 'studentInfo');
+          await setDoc(profileRef, profileData, { merge: true });
+        } catch (err) {
+          console.error('Error saving profile to Firestore:', err);
+        }
+      }
+    }
+
+    function openCreatePostModal() {
+      if (!userProfile) {
+        showToast('Please set up your Student Profile first so peers know your university.', 'info');
+        openAuthModal();
+        return;
+      }
+      document.getElementById('postCategoryInput').value = userProfile.field || 'Computer Science & Networking';
+      const modal = document.getElementById('createPostModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeCreatePostModal() {
+      const modal = document.getElementById('createPostModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    async function handleCreatePost(e) {
+      e.preventDefault();
+      if (!userProfile) {
+        openAuthModal();
+        return;
+      }
+
+      const submitBtn = document.getElementById('submitPostBtn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Publishing...';
+
+      const newPost = {
+        title: document.getElementById('postTitleInput').value.trim(),
+        type: document.getElementById('postTypeInput').value,
+        category: document.getElementById('postCategoryInput').value,
+        content: document.getElementById('postContentInput').value.trim(),
+        reference: document.getElementById('postRefInput').value.trim(),
+        authorId: currentUser ? currentUser.uid : 'local-student',
+        authorName: userProfile.name,
+        authorUniversity: userProfile.university,
+        authorCountry: userProfile.country,
+        authorLevel: userProfile.level,
+        upvotes: 1,
+        answerCount: 0,
+        createdAt: Date.now(),
+      };
+
+      try {
+        if (db && currentUser) {
+          const postsCol = collection(db, 'artifacts', appId, 'public', 'data', 'scholar_posts');
+          await addDoc(postsCol, newPost);
+        } else {
+          newPost.id = 'local-' + Date.now();
+          newPost.seedAnswers = [];
+          allPosts.unshift(newPost);
+          renderFeed();
+        }
+        document.getElementById('createPostForm').reset();
+        closeCreatePostModal();
+        showToast('Your study post has been published to the global commons!');
+      } catch (err) {
+        console.error('Error creating post:', err);
+        showToast('Could not publish post. Please try again.', 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Publish to Commons';
+      }
+    }
+
+    async function handleUpvotePost(postId) {
+      const post = allPosts.find((p) => p.id === postId);
+      if (!post) return;
+
+      if (postId.startsWith('seed-') || !db || !currentUser) {
+        post.upvotes = (post.upvotes || 0) + 1;
+        renderFeed();
+        if (selectedPostId === postId) renderDetailHeader(post);
+        showToast('Upvoted academic thread!');
+        return;
+      }
+
+      try {
+        const postRef = doc(db, 'artifacts', appId, 'public', 'data', 'scholar_posts', postId);
+        await updateDoc(postRef, {
+          upvotes: increment(1),
+        });
+        showToast('Upvoted academic thread!');
+      } catch (err) {
+        console.error('Upvote failed:', err);
+      }
+    }
+
+    function renderDetailHeader(post) {
+      const badgeClass = getBadgeStyle(post.type);
+      document.getElementById('detailPostBody').innerHTML = `
+        <div class="flex flex-wrap items-center gap-2 mb-3">
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold border ${badgeClass}">
+            ${escapeHTML(post.type)}
+          </span>
+          <span class="text-xs font-medium text-slate-500 dark:text-slate-400">
+            ${escapeHTML(post.category)} • Posted ${timeAgo(post.createdAt)}
+          </span>
+        </div>
+
+        <h2 class="font-serif text-xl sm:text-2xl font-bold text-slate-900 dark:text-white leading-snug mb-3">
+          ${escapeHTML(post.title)}
+        </h2>
+
+        <div class="flex items-center justify-between flex-wrap gap-3 pb-4 mb-4 border-b border-slate-100 dark:border-slate-800">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-sm">
+              ${escapeHTML((post.authorName || 'S')[0].toUpperCase())}
+            </div>
+            <div>
+              <div class="text-sm font-bold text-slate-900 dark:text-white">${escapeHTML(post.authorName)}</div>
+              <div class="text-xs text-slate-500 dark:text-slate-400">
+                ${escapeHTML(post.authorLevel || 'Student')} • ${escapeHTML(post.authorUniversity)} (${escapeHTML(post.authorCountry)})
+              </div>
+            </div>
+          </div>
+
+          <button id="detailUpvoteBtn" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-100 dark:bg-navy-850 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 text-slate-700 dark:text-slate-200 hover:text-emerald-600 text-xs font-semibold transition">
+            <i class="fa-solid fa-arrow-up"></i>
+            <span>Helpful (${post.upvotes || 0})</span>
+          </button>
+        </div>
+
+        <div class="text-sm text-slate-700 dark:text-slate-200 whitespace-pre-line leading-relaxed mb-4">
+          ${escapeHTML(post.content)}
+        </div>
+
+        ${
+          post.reference
+            ? `<div class="p-3 rounded-xl bg-slate-50 dark:bg-navy-850 border border-slate-200/70 dark:border-slate-700/70 text-xs text-slate-600 dark:text-slate-300">
+                <strong class="text-slate-800 dark:text-slate-100"><i class="fa-solid fa-book-bookmark text-emerald-500 mr-1.5"></i>Citations / Course Reference:</strong> ${escapeHTML(post.reference)}
+              </div>`
+            : ''
+        }
+      `;
+
+      document.getElementById('detailUpvoteBtn').addEventListener('click', () => handleUpvotePost(post.id));
+    }
+
+    function renderAnswersList(answers) {
+      document.getElementById('detailAnswerCount').textContent = answers.length;
+      const listEl = document.getElementById('detailAnswersList');
+
+      if (answers.length === 0) {
+        listEl.innerHTML = `
+          <div class="text-center py-6 px-4 rounded-2xl bg-slate-50 dark:bg-navy-850/60 border border-dashed border-slate-200 dark:border-slate-700 text-xs text-slate-500 dark:text-slate-400">
+            No peer responses yet. Be the first student to share an academic insight or solution!
+          </div>
+        `;
+        return;
+      }
+
+      listEl.innerHTML = answers
+        .sort((a, b) => (b.upvotes || 0) - (a.upvotes || 0))
+        .map(
+          (ans) => `
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-navy-850 border border-slate-200/80 dark:border-slate-800 space-y-2">
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2">
+                <span class="w-6 h-6 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 flex items-center justify-center text-[11px] font-bold">
+                  ${escapeHTML((ans.authorName || 'P')[0].toUpperCase())}
+                </span>
+                <div>
+                  <span class="text-xs font-bold text-slate-900 dark:text-white">${escapeHTML(ans.authorName)}</span>
+                  <span class="text-[11px] text-slate-500 dark:text-slate-400 block sm:inline sm:ml-1.5">
+                    ${escapeHTML(ans.authorUniversity)} • ${escapeHTML(ans.authorCountry)}
+                  </span>
+                </div>
+              </div>
+              <span class="text-[11px] text-slate-400">${timeAgo(ans.createdAt)}</span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-700 dark:text-slate-200 whitespace-pre-line leading-relaxed pt-1">
+              ${escapeHTML(ans.content)}
+            </p>
+          </div>
+        `
+        )
+        .join('');
+    }
+
+    function openPostDetail(postId) {
+      const post = allPosts.find((p) => p.id === postId);
+      if (!post) return;
+
+      selectedPostId = postId;
+      renderDetailHeader(post);
+
+      const modal = document.getElementById('postDetailModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+
+      // Detach any previous listener
+      if (activeUnsubscribeAnswers) {
+        activeUnsubscribeAnswers();
+        activeUnsubscribeAnswers = null;
+      }
+
+      if (postId.startsWith('seed-') || !db || !currentUser) {
+        renderAnswersList(post.seedAnswers || []);
+      } else {
+        // Subscribe to live answers subcollection in Firestore
+        const answersCol = collection(db, 'artifacts', appId, 'public', 'data', 'scholar_posts', postId, 'answers');
+        activeUnsubscribeAnswers = onSnapshot(
+          answersCol,
+          (snap) => {
+            const liveAnswers = [];
+            snap.forEach((d) => liveAnswers.push({ id: d.id, ...d.data() }));
+            renderAnswersList(liveAnswers);
+          },
+          (err) => console.error('Error loading answers:', err)
+        );
+      }
+    }
+
+    function closePostDetail() {
+      const modal = document.getElementById('postDetailModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      selectedPostId = null;
+      if (activeUnsubscribeAnswers) {
+        activeUnsubscribeAnswers();
+        activeUnsubscribeAnswers = null;
+      }
+    }
+
+    async function handleSubmitAnswer(e) {
+      e.preventDefault();
+      if (!selectedPostId) return;
+
+      if (!userProfile) {
+        showToast('Please create your Student Profile before answering peers.', 'info');
+        openAuthModal();
+        return;
+      }
+
+      const content = document.getElementById('newAnswerInput').value.trim();
+      if (!content) return;
+
+      const btn = document.getElementById('submitAnswerBtn');
+      btn.disabled = true;
+      btn.textContent = 'Posting...';
+
+      const newAnswer = {
+        authorName: userProfile.name,
+        authorUniversity: userProfile.university,
+        authorCountry: userProfile.country,
+        content,
+        upvotes: 1,
+        createdAt: Date.now(),
+      };
+
+      try {
+        const post = allPosts.find((p) => p.id === selectedPostId);
+        if (selectedPostId.startsWith('seed-') || !db || !currentUser) {
+          if (!post.seedAnswers) post.seedAnswers = [];
+          post.seedAnswers.push({ id: 'ans-' + Date.now(), ...newAnswer });
+          post.answerCount = post.seedAnswers.length;
+          renderAnswersList(post.seedAnswers);
+          renderFeed();
+        } else {
+          const answersCol = collection(db, 'artifacts', appId, 'public', 'data', 'scholar_posts', selectedPostId, 'answers');
+          await addDoc(answersCol, newAnswer);
+          const postRef = doc(db, 'artifacts', appId, 'public', 'data', 'scholar_posts', selectedPostId);
+          await updateDoc(postRef, { answerCount: increment(1) });
+        }
+
+        document.getElementById('newAnswerInput').value = '';
+        showToast('Your peer response has been added!');
+      } catch (err) {
+        console.error('Error posting answer:', err);
+        showToast('Failed to submit answer.', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Post Peer Response';
+      }
+    }
+
+    // =========================================================================
+    // 6. EVENT LISTENERS & BOOTSTRAP
+    // =========================================================================
+    window.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+      renderCategories();
+      renderProfileUI();
+
+      // Search & Sort listeners
+      const handleSearch = (val) => {
+        currentSearch = val;
+        document.getElementById('searchInput').value = val;
+        document.getElementById('mobileSearchInput').value = val;
+        renderFeed();
+      };
+      document.getElementById('searchInput').addEventListener('input', (e) => handleSearch(e.target.value));
+      document.getElementById('mobileSearchInput').addEventListener('input', (e) => handleSearch(e.target.value));
+      document.getElementById('sortSelect').addEventListener('change', (e) => {
+        currentSort = e.target.value;
+        renderFeed();
+      });
+
+      // Brand reset
+      document.getElementById('resetFiltersBrand').addEventListener('click', (e) => {
+        e.preventDefault();
+        currentCategory = 'ALL';
+        currentType = 'ALL';
+        handleSearch('');
+        document.querySelectorAll('.type-filter-btn').forEach((b) => {
+          b.className = 'type-filter-btn flex items-center justify-between w-full px-3 py-2 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-navy-850 transition';
+        });
+        document.querySelector('[data-type="ALL"]').className =
+          'type-filter-btn active-type flex items-center justify-between w-full px-3 py-2 rounded-xl text-sm font-medium bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60 transition';
+        renderCategories();
+        renderFeed();
+      });
+
+      // Type filters
+      document.querySelectorAll('.type-filter-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          currentType = btn.getAttribute('data-type');
+          document.querySelectorAll('.type-filter-btn').forEach((b) => {
+            b.className =
+              'type-filter-btn flex items-center justify-between w-full px-3 py-2 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-navy-850 transition';
+          });
+          btn.className =
+            'type-filter-btn active-type flex items-center justify-between w-full px-3 py-2 rounded-xl text-sm font-medium bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60 transition';
+          renderFeed();
+        });
+      });
+
+      // Modal Triggers
+      document.getElementById('closeAuthModalBtn').addEventListener('click', closeAuthModal);
+      document.getElementById('cancelAuthBtn').addEventListener('click', closeAuthModal);
+      document.getElementById('studentProfileForm').addEventListener('submit', handleSaveProfile);
+      document.getElementById('signOutBtn').addEventListener('click', () => {
+        userProfile = null;
+        renderProfileUI();
+        closeAuthModal();
+        showToast('Signed out of student profile.', 'info');
+      });
+
+      document.getElementById('openCreatePostBtn').addEventListener('click', openCreatePostModal);
+      document.getElementById('closeCreatePostBtn').addEventListener('click', closeCreatePostModal);
+      document.getElementById('cancelCreatePostBtn').addEventListener('click', closeCreatePostModal);
+      document.getElementById('createPostForm').addEventListener('submit', handleCreatePost);
+
+      document.getElementById('closeDetailModalBtn').addEventListener('click', closePostDetail);
+      document.getElementById('submitAnswerForm').addEventListener('submit', handleSubmitAnswer);
+
+      // Academic Honor Code modal
+      const openIntegrity = () => {
+        const m = document.getElementById('integrityModal');
+        m.classList.remove('hidden');
+        m.classList.add('flex');
+      };
+      const closeIntegrity = () => {
+        const m = document.getElementById('integrityModal');
+        m.classList.add('hidden');
+        m.classList.remove('flex');
+      };
+      document.getElementById('openIntegrityModalBtn').addEventListener('click', openIntegrity);
+      document.getElementById('footerIntegrityBtn').addEventListener('click', openIntegrity);
+      document.getElementById('closeIntegrityModalBtn').addEventListener('click', closeIntegrity);
+      document.getElementById('acceptIntegrityBtn').addEventListener('click', closeIntegrity);
+
+      // Initialize Firebase & data stream
+      initFirebase();
+    });
+  </script>
+</body>
+</html>
